@@ -1301,3 +1301,43 @@ button:focus-visible {
     transform: none;
   }
 }
+
+/* ===== PHONE FIXES ===== */
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+/* draw arrows as plain text symbols, not emoji */
+.service-arrow,
+.primary-button span,
+.nav-button,
+.secondary-button,
+.select-options li i,
+.text-link,
+.preview-label,
+.submit-button span {
+  font-family: Arial, "Segoe UI Symbol", sans-serif;
+  font-variant-emoji: text;
+}
+
+@media (max-width: 600px) {
+  .service {
+    grid-template-columns: 36px 1fr 22px;
+    gap: 14px;
+  }
+
+  .service-arrow {
+    font-size: 18px;
+  }
+
+  .hero h1 {
+    overflow-wrap: break-word;
+  }
+}
