@@ -100,10 +100,12 @@ button:focus-visible {
 }
 
 .logo-image {
-  width: 175px;
-  height: 65px;
-  object-fit: contain;
+  width: auto;
+  height: 58px;
+  max-width: 100%;
   display: block;
+  /* lets the black background of the logo blend into the header */
+  mix-blend-mode: lighten;
 }
 
 .logo-mark {
@@ -459,14 +461,31 @@ button:focus-visible {
   line-height: 1.7;
 }
 
+/* gold arrow inside a thin gold circle */
 .service-arrow {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(198, 164, 106, 0.45);
+  border-radius: 50%;
   color: var(--gold);
-  font-size: 23px;
-  transition: transform 0.3s;
+  font-family: Arial, "Segoe UI Symbol", sans-serif;
+  font-size: 18px;
+  line-height: 1;
+  transition: background 0.3s, color 0.3s, border-color 0.3s;
 }
 
-.service:hover .service-arrow {
-  transform: translate(5px, -5px);
+.service:hover .service-arrow,
+.service:active .service-arrow {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--black);
+}
+
+.primary-button span,
+.submit-button span {
+  font-family: Arial, "Segoe UI Symbol", sans-serif;
 }
 
 /* ---------- PORTFOLIO ---------- */
@@ -1188,35 +1207,114 @@ button:focus-visible {
 
 @media (max-width: 600px) {
 
+  .logo-image {
+    height: 50px;
+  }
+
+  /* ----- HOMEPAGE ON PHONES: fills the screen, tidy and centred on the message ----- */
+
   .hero {
-    min-height: auto;
-    padding: 90px var(--side) 50px;
+    min-height: calc(100svh - 86px);
+    padding: 56px var(--side) 40px;
+    justify-content: space-between;
+    gap: 44px;
+  }
+
+  .hero::before {
+    background:
+      radial-gradient(ellipse 90% 45% at 100% 0%, rgba(198, 164, 106, 0.32), transparent 70%),
+      radial-gradient(ellipse 80% 40% at 0% 100%, rgba(198, 164, 106, 0.14), transparent 70%);
+  }
+
+  /* the ring and big "K." only crowd a small screen */
+  .hero::after,
+  .hero-decoration {
+    display: none;
+  }
+
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    margin-bottom: 22px;
   }
 
   .hero h1 {
-    font-size: 44px;
+    font-size: clamp(42px, 12.5vw, 54px);
+    line-height: 1.06;
     letter-spacing: -1.5px;
   }
 
   .hero-description {
     font-size: 15px;
+    line-height: 1.75;
+    margin: 22px 0 30px;
   }
 
+  /* two clean full-width buttons */
+  .hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .primary-button {
+    justify-content: center;
+    padding: 18px 24px;
+    font-size: 13px;
+  }
+
+  .secondary-button {
+    text-align: center;
+    padding: 16px 24px;
+    border: 1px solid rgba(198, 164, 106, 0.45);
+    border-radius: 999px;
+    font-size: 13px;
+  }
+
+  /* the three taglines become a neat gold-dash list */
   .hero-bottom {
-    margin-top: 60px;
-    gap: 14px 30px;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 0;
+    padding-top: 22px;
+    padding-right: 72px;
+    font-size: 10px;
+    letter-spacing: 2.5px;
   }
 
-  .hero-decoration {
-    font-size: 130px;
-    right: 6%;
-    bottom: 120px;
-    opacity: 0.6;
+  .hero-bottom span {
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
 
-  .hero::after {
-    width: 360px;
-    height: 360px;
+  .hero-bottom span::before {
+    content: "";
+    width: 18px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  /* services list on phones */
+  .service {
+    grid-template-columns: 30px 1fr 36px;
+    align-items: start;
+    gap: 14px;
+    padding: 26px 0;
+  }
+
+  .service-number {
+    padding-top: 6px;
+  }
+
+  .service h3 {
+    font-size: 19px;
+  }
+
+  .service-arrow {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
   }
 
   .section {
@@ -1299,45 +1397,5 @@ button:focus-visible {
   .reveal {
     opacity: 1;
     transform: none;
-  }
-}
-
-/* ===== PHONE FIXES ===== */
-html,
-body {
-  max-width: 100%;
-  overflow-x: clip;
-}
-
-img,
-svg {
-  max-width: 100%;
-}
-
-/* draw arrows as plain text symbols, not emoji */
-.service-arrow,
-.primary-button span,
-.nav-button,
-.secondary-button,
-.select-options li i,
-.text-link,
-.preview-label,
-.submit-button span {
-  font-family: Arial, "Segoe UI Symbol", sans-serif;
-  font-variant-emoji: text;
-}
-
-@media (max-width: 600px) {
-  .service {
-    grid-template-columns: 36px 1fr 22px;
-    gap: 14px;
-  }
-
-  .service-arrow {
-    font-size: 18px;
-  }
-
-  .hero h1 {
-    overflow-wrap: break-word;
   }
 }
