@@ -27,6 +27,21 @@ if (menuToggle && nav) {
       menuToggle.setAttribute("aria-expanded", "false");
     });
   });
+
+  // close the menu when tapping outside it or pressing Escape
+  function closeMenu() {
+    nav.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute("aria-label", "Open navigation");
+  }
+
+  document.addEventListener("click", e => {
+    if (!nav.contains(e.target) && !menuToggle.contains(e.target)) closeMenu();
+  });
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") closeMenu();
+  });
 }
 
 
@@ -56,6 +71,47 @@ if ("IntersectionObserver" in window) {
 
 const yearElement = document.getElementById("year");
 if (yearElement) yearElement.textContent = new Date().getFullYear();
+
+
+// GOLD ARROWS
+// Phones draw the arrow characters (↗ ↓) as blue emoji. This swaps each one
+// for the gold icon defined in style.css (.arr).
+
+(function () {
+  const ICONS = { "↗": "arr", "↓": "arr down" };
+
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const tag = node.parentNode.nodeName;
+      if (tag === "SCRIPT" || tag === "STYLE" || tag === "TEXTAREA") {
+        return NodeFilter.FILTER_REJECT;
+      }
+      return /[↗↓]/.test(node.nodeValue)
+        ? NodeFilter.FILTER_ACCEPT
+        : NodeFilter.FILTER_REJECT;
+    }
+  });
+
+  const textNodes = [];
+  while (walker.nextNode()) textNodes.push(walker.currentNode);
+
+  textNodes.forEach(node => {
+    const fragment = document.createDocumentFragment();
+
+    node.nodeValue.split(/([↗↓])/).forEach(part => {
+      if (ICONS[part]) {
+        const icon = document.createElement("i");
+        icon.className = ICONS[part];
+        icon.setAttribute("aria-hidden", "true");
+        fragment.appendChild(icon);
+      } else if (part) {
+        fragment.appendChild(document.createTextNode(part));
+      }
+    });
+
+    node.parentNode.replaceChild(fragment, node);
+  });
+})();
 
 
 // CUSTOM SERVICE DROPDOWN
@@ -162,22 +218,6 @@ if (yearElement) yearElement.textContent = new Date().getFullYear();
     } finally {
       button.disabled = false;
       button.innerHTML = originalText;
-    }
-  });
-})();
-
-
-// ARROWS: stop iPhones turning the arrow into a coloured emoji box
-(function () {
-  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-  const nodes = [];
-  while (walker.nextNode()) nodes.push(walker.currentNode);
-
-  nodes.forEach(node => {
-    const tag = node.parentNode && node.parentNode.nodeName;
-    if (tag === "SCRIPT" || tag === "STYLE") return;
-    if (node.nodeValue.includes("↗")) {
-      node.nodeValue = node.nodeValue.replace(/↗︎?/g, "↗︎");
     }
   });
 })();
