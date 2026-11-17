@@ -165,3 +165,19 @@ if (yearElement) yearElement.textContent = new Date().getFullYear();
     }
   });
 })();
+
+
+// ARROWS: stop iPhones turning the arrow into a coloured emoji box
+(function () {
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  nodes.forEach(node => {
+    const tag = node.parentNode && node.parentNode.nodeName;
+    if (tag === "SCRIPT" || tag === "STYLE") return;
+    if (node.nodeValue.includes("↗")) {
+      node.nodeValue = node.nodeValue.replace(/↗︎?/g, "↗︎");
+    }
+  });
+})();
